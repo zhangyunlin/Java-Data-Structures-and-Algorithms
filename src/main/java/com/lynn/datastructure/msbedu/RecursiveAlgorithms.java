@@ -16,6 +16,9 @@ public class RecursiveAlgorithms {
         int leftMax = getMax(arr, left, mid);
         int rightMax = getMax(arr, mid + 1, right);
         return Math.max(leftMax, rightMax);
+
+
+
     }
 
 
