@@ -7,6 +7,7 @@ public class RecursiveAlgorithms {
     }
 
     //get mac value between left and right in array
+    //O(NlogN)
     public static int getMax(int[] arr, int left, int right) {
         if (left == right) {
             return arr[left];
@@ -16,9 +17,6 @@ public class RecursiveAlgorithms {
         int leftMax = getMax(arr, left, mid);
         int rightMax = getMax(arr, mid + 1, right);
         return Math.max(leftMax, rightMax);
-
-
-
     }
 
 

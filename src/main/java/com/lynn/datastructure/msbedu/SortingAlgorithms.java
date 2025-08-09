@@ -8,6 +8,7 @@ public class SortingAlgorithms {
         System.out.println(Arrays.toString(bubbleSort(new int[]{2, 1, 4, 3, 10, 8, 7, 8, 6, 5})));
         System.out.println(Arrays.toString(selectionSort(new int[]{2, 1, 4, 3, 10, 8, 7, 8, 6, 5})));
         System.out.println(Arrays.toString(insertionSort(new int[]{2, 1, 4, 3, 10, 8, 7, 8, 6, 5})));
+        System.out.println(Arrays.toString(mergeSort(new int[]{2, 1, 4, 3, 10, 8, 7, 8, 6, 5})));
 
     }
 
@@ -66,8 +67,37 @@ public class SortingAlgorithms {
             return arr;
         }
 
+        process(arr, 0, arr.length - 1);
         return arr;
 
+    }
+
+    private static void process(int[] arr, int L, int R) {
+        if (L == R){
+            return;
+        }
+//        int mid = L + ((R - L) >> 1);
+        int mid = (L + R) >>> 1;
+        process(arr, L, mid);
+        process(arr, mid + 1, R);
+        merge(arr, L, mid, R);
+    }
+
+    private static void merge(int[] arr, int L, int mid, int R) {
+        int[] temp = new int[R - L + 1];
+        int i = 0, p1 = L, p2 = mid + 1;
+        while (p1 <= mid && p2 <= R) {
+            temp[i++] = arr[p1] <= arr[p2] ? arr[p1++] : arr[p2++];
+        }
+        while (p1 <= mid) {
+            temp[i++] = arr[p1++];
+        }
+        while (p2 <= R) {
+            temp[i++] = arr[p2++];
+        }
+        for (int j = 0; j < temp.length; j++) {
+            arr[L + j] = temp[j];
+        }
     }
 
     //等概率产生[0,n]随机数组
