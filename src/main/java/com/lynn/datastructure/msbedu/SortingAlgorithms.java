@@ -62,6 +62,11 @@ public class SortingAlgorithms {
         return arr;
     }
 
+    /**
+     * O(NlogN) time
+     * sort right and left at the first step
+     * then merge right and left
+     */
     public static int[] mergeSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return arr;
@@ -73,7 +78,7 @@ public class SortingAlgorithms {
     }
 
     private static void process(int[] arr, int L, int R) {
-        if (L == R){
+        if (L == R) {
             return;
         }
 //        int mid = L + ((R - L) >> 1);
@@ -100,12 +105,61 @@ public class SortingAlgorithms {
         }
     }
 
+    /**
+     * given an array, and an integer num
+     * put all numbers that smaller than num to the right
+     * put all numbers that greater than num to the left
+     * require: O(1) space, 0(n) time
+     *
+     * @param size
+     * @param maxValue
+     * @return
+     */
+    public static void quickSort(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return;
+        }
+
+        quickSort(arr, 0, int L, int R);
+    }
+
+    public static void quickSort(int[] arr, int L, int R) {
+        if (L < R) {
+            //随机选择划分的数，用于区分大于小于部分
+            swap(arr, L + (int) (Math.random() * (R - L + 1)), R);
+            int[] p = partition(arr, L, R);
+            quickSort(arr, L, p[0] - 1);
+            quickSort(arr, p[1] + 1, R);
+        }
+    }
+
+    private static void swap(int[] arr, int i, int r) {
+        BitwiseOperations.swap(arr, i, r);
+    }
+
+    private static int[] partition(int[] arr, int l, int r) {
+        int less = l - 1; // <区边界
+        int more = r; //> 区边界
+        while (l < more) {
+            if (arr[l] < arr[r]) {
+                swap(arr, ++less, l++);
+            } else if (arr[l] > arr[r]) {
+                swap(arr, --more, l);
+            } else {
+                l++;
+            }
+        }
+        swap(arr, more, l);
+        return new int[]{less + 1, more};
+    }
+
+
     //等概率产生[0,n]随机数组
     public static int[] generateRandomArray(int size, int maxValue) {
         //长度随机的array
-        int[] arr = new int[(int)((size + 1) * Math.random())];
+        int[] arr = new int[(int) ((size + 1) * Math.random())];
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = (int)(Math.random() * (maxValue+1))-(int)(Math.random() * maxValue);
+            arr[i] = (int) (Math.random() * (maxValue + 1)) - (int) (Math.random() * maxValue);
         }
         return arr;
     }
