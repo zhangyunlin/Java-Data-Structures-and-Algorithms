@@ -167,16 +167,40 @@ public class BTreeAlgorithms {
             return 0;
         }
 
-        int maxWidth = 0, currentWidth = 0, curLevel = 0;
+        int maxWidth = Integer.MIN_VALUE, currentLevelNodes = 0, curLevel = 1;
         HashMap<BNode, Integer> levelMap = new HashMap<>();
         levelMap.put(root, 1);
 
         Queue<BNode> queue = new LinkedList<>();
         queue.add(root);
 
-
-
+        while (!queue.isEmpty()){
+            BNode cur = queue.poll();
+            Integer curNodeLevel = levelMap.get(cur);
+            if (curNodeLevel == curLevel) {
+                curNodeLevel ++;
+            }else {
+                maxWidth = Math.max(maxWidth, curNodeLevel);
+                curLevel++;
+                currentLevelNodes = 1;
+            }
+            if (cur.left != null) {
+                levelMap.put(cur.left, curNodeLevel + 1);
+                queue.add(cur.left);
+            }
+            if (cur.right != null) {
+                levelMap.put(cur.right, curNodeLevel + 1);
+                queue.add(cur.right);
+            }
+        }
+        return maxWidth;
     }
+
+    /*
+     * 如何判断一棵树是搜索二叉树？
+     *
+     */
+
 
 
 
