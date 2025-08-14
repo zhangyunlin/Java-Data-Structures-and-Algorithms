@@ -2,10 +2,8 @@ package com.lynn.datastructure.msbedu;
 
 import com.lynn.datastructure.msbedu.model.BNode;
 
-import java.util.Deque;
-import java.util.HashMap;
+import java.util.*;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class BTreeAlgorithms {
@@ -134,7 +132,6 @@ public class BTreeAlgorithms {
 
     /*
     post order traversal without recursion
-
      */
     public static void postorderStack(BNode root) {
         if (root == null) {
@@ -198,8 +195,91 @@ public class BTreeAlgorithms {
 
     /*
      * 如何判断一棵树是搜索二叉树？
-     *
+     * Binary Search Tree (BST)
+     * 1.All values in its left subtree are less than the node’s value.
+     * 2.All values in its right subtree are greater than the node’s value.
+     * 3.Both left and right subtrees themselves must also be BSTs.
      */
+    //Inorder Traversal (Recommended)
+    public static int preValue = Integer.MIN_VALUE;
+    public static boolean isBST1(BNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        // check the left tree
+        boolean flag = isBST1(root.left);
+        if (!flag) {
+            return false;
+        }
+
+        if (root.value <= preValue) {
+            return false;
+        }else {
+            preValue = root.value;
+        }
+
+        return isBST1(root.right);
+    }
+
+
+    /*
+    更傻的代码
+    使用inorder遍历顺序，放入数组
+    比较数组中数据的大小，如果是升序排列，就是BST
+     */
+    public static boolean isBST2(BNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        ArrayList<BNode> inorderList = new ArrayList<>();
+        //将树中元素放入数组中
+        inorderProcess(root, inorderList);
+        //判断元素为升序
+        for (int i = 0; i < inorderList.size() -1; i++) {
+            if (inorderList.get(i).value > inorderList.get(i+1).value) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static void inorderProcess(BNode root, ArrayList<BNode> inorderList) {
+        inorderProcess(root.left, inorderList);
+        inorderList.add(root);
+        inorderProcess(root.right, inorderList);
+    }
+
+
+    /*
+    非递归的方式实现中序遍历
+    使用中序遍历的方法判断是否为BST
+     */
+    public static boolean isBST3(BNode root) {
+        if (root == null) {
+            return true;
+        }
+
+        int preValue = Integer.MIN_VALUE;
+        Stack<BNode> stack = new Stack<>();
+        while (!stack.isEmpty() || root != null) {
+            if (root != null) {
+                stack.push(root);
+                root = root.left;
+            }else {
+                root = stack.pop();
+                if (preValue >= root.value) {
+                    return false;
+                }else {
+                    preValue = root.value;
+                }
+                root = root.right;
+            }
+        }
+        return true;
+    }
 
 
 
